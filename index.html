@@ -225,8 +225,17 @@
             "Tu as confondu \"oui\" et \"non\" je crois 😮‍💨",
             "Sivouplé madame",
             "Je vais kidnapper Nuts et Noisette si tu dis non 😾",
-            ":("
+            ":(",
+            "Je t'aime quand même hein 😘",
+            "Promis je mord pas... tout de suite 😏",
+            "snif snif",
         ];
+
+        const funnyMessagesFinal = [
+            "Bon c'est plus drôle là, clique sur \"oui\" sinon je vais devoir sortir les gros moyens 😤",
+        ]
+
+        let counter = 0;
 
         // Événements pour le bouton "Non"
         // Desktop : quand la souris passe dessus
@@ -240,6 +249,7 @@
         // Sécurité : si on arrive quand même à cliquer
         noBtn.addEventListener('click', (e) => {
             e.preventDefault();
+            counter++;
             showFunnyAlert();
             moveButton();
         });
@@ -280,8 +290,11 @@
 
         function showFunnyAlert() {
             // Sélectionner un message aléatoire
+            if (counter >= 15) {
+                randomMessage = funnyMessagesFinal[0];
+            } else {
             const randomMessage = funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
-            
+            }
             // Créer la div de message
             const messageDiv = document.createElement('div');
             messageDiv.className = 'funny-message';
