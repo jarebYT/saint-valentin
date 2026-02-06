@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Une question pour toi...</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        /* --- STYLE GÉNÉRAL --- */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #ffe6e9; /* Rose très pâle */
+            font-family: 'Nunito', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden; /* Empêche le scroll quand le bouton bouge */
+            flex-direction: column;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(255, 182, 193, 0.4);
+            max-width: 90%;
+            width: 350px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Image ou Gif mignon en haut */
+        .gif-container img {
+            width: 150px;
+            height: auto;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            color: #ff4d6d;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        /* --- BOUTONS --- */
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            min-height: 60px; /* Espace réservé pour éviter les sauts */
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            font-weight: bold;
+            transition: transform 0.2s ease;
+        }
+
+        #yes-btn {
+            background-color: #ff4d6d;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+        }
+
+        #yes-btn:hover {
+            transform: scale(1.1);
+            background-color: #ff2a51;
+        }
+
+        #no-btn {
+            background-color: #ffffff;
+            color: #ff4d6d;
+            border: 2px solid #ff4d6d;
+            position: relative; /* Sera changé en absolute par le JS */
+            transition: all 0.3s ease; /* Animation fluide du mouvement */
+        }
+
+        /* --- ÉCRAN DE SUCCÈS --- */
+        #success-message {
+            display: none; /* Caché par défaut */
+            flex-direction: column;
+            align-items: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .heart-beat {
+            font-size: 4rem;
+            color: #ff4d6d;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.3); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container" id="question-container">
+        <div class="gif-container">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Z5Z3U4aG42OG84Y2V6Z3Z5Z3U4aG42OG84Y2V6Z3Z5Z3U4aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Cute Bear">
+        </div>
+        <h1>Veux-tu être ma Valentine ? 🌹</h1>
+        
+        <div class="btn-group">
+            <button id="yes-btn">OUI ! 😍</button>
+            <button id="no-btn">Non 😢</button>
+        </div>
+    </div>
+
+    <div class="container" id="success-message">
+        <div class="heart-beat">💖</div>
+        <h1>Yeeeees !</h1>
+        <p>Je savais que tu dirais oui !<br>On se voit le 14 😘</p>
+    </div>
+
+    <script>
+        const yesBtn = document.getElementById('yes-btn');
+        const noBtn = document.getElementById('no-btn');
+        const questionContainer = document.getElementById('question-container');
+        const successMessage = document.getElementById('success-message');
+
+        // Fonction pour déplacer le bouton "Non"
+        function moveButton() {
+            // Obtenir les dimensions de la fenêtre
+            const maxWidth = window.innerWidth - noBtn.offsetWidth;
+            const maxHeight = window.innerHeight - noBtn.offsetHeight;
+
+            // Calculer une position aléatoire
+            const randomX = Math.floor(Math.random() * maxWidth);
+            const randomY = Math.floor(Math.random() * maxHeight);
+
+            // Appliquer la nouvelle position
+            noBtn.style.position = 'fixed'; // Passe en fixed pour bouger partout
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        // Événements pour le bouton "Non"
+        // Desktop : quand la souris passe dessus
+        noBtn.addEventListener('mouseover', moveButton);
+        // Mobile : quand on essaie de toucher
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Empêche le clic
+            moveButton();
+        });
+        // Sécurité : si on arrive quand même à cliquer
+        noBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            moveButton();
+        });
+
+        // Événement pour le bouton "Oui"
+        yesBtn.addEventListener('click', () => {
+            // Lancer les confettis
+            launchConfetti();
+            
+            // Cacher la question et montrer le message de succès
+            questionContainer.style.display = 'none';
+            successMessage.style.display = 'flex';
+        });
+
+        // Fonction de confettis (utilise la librairie importée)
+        function launchConfetti() {
+            const duration = 3 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                const particleCount = 50 * (timeLeft / duration);
+                // Lance des confettis depuis deux endroits aléatoires
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+    </script>
+</body>
+</html>
