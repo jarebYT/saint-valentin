@@ -36,7 +36,7 @@
 
         /* Image ou Gif mignon en haut */
         .gif-container img {
-            width: 150px;
+            width: 200px;
             height: auto;
             border-radius: 15px;
             margin-bottom: 20px;
@@ -116,15 +116,55 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* --- MESSAGES DE NOTIFICATION --- */
+        .funny-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #e692a1;
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(255, 128, 151, 0.5);
+            animation: messageIn 0.5s ease-in, messageOut 0.5s ease-out 3.5s forwards;
+            pointer-events: none;
+        }
+
+        @keyframes messageIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        @keyframes messageOut {
+            from {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+        }
+
     </style>
 </head>
 <body>
 
     <div class="container" id="question-container">
         <div class="gif-container">
-            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Z5Z3U4aG42OG84Y2V6Z3Z5Z3U4aG42OG84Y2V6Z3Z5Z3U4aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Cute Bear">
+            <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExeHdwaDZzenI0N3h1M2t1OG1kenkwY3k0d3p1ZXdxdGFncHI4OHVxeSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Y1ZZNwUbyVXjd0JlsR/giphy.gif" alt="Gif">
         </div>
-        <h1>Veux-tu être ma Valentine ? 🌹</h1>
+        <h1>Veux-tu être ma non-Valentine ? 🌹</h1>
         
         <div class="btn-group">
             <button id="yes-btn">OUI ! 😍</button>
@@ -134,8 +174,8 @@
 
     <div class="container" id="success-message">
         <div class="heart-beat">💖</div>
-        <h1>Yeeeees !</h1>
-        <p>Je savais que tu dirais oui !<br>On se voit le 14 😘</p>
+        <h1>LESSGOOOOOOO !</h1>
+        <p>Je suis joie<br>On se voit (pas) le 14 au restau dans ce cas 😘</p>
     </div>
 
     <script>
@@ -160,17 +200,30 @@
             noBtn.style.top = randomY + 'px';
         }
 
+        // Messages prédéfinis
+        const funnyMessages = [
+            "Même si je t'offre un bubble tea coco chaud ? 👀",
+            "Prout",
+            "Oupsi, tu as failli cliquer..",
+            "Tu as confondu \"oui\" et \"non\" je crois 😮‍💨",
+            "Sivouplé madame",
+            "Je vais kidnapper Nuts et Noisette si tu dis non 😾",
+            ":("
+        ];
+
         // Événements pour le bouton "Non"
         // Desktop : quand la souris passe dessus
         noBtn.addEventListener('mouseover', moveButton);
         // Mobile : quand on essaie de toucher
         noBtn.addEventListener('touchstart', (e) => {
             e.preventDefault(); // Empêche le clic
+            showFunnyAlert();
             moveButton();
         });
         // Sécurité : si on arrive quand même à cliquer
         noBtn.addEventListener('click', (e) => {
             e.preventDefault();
+            showFunnyAlert();
             moveButton();
         });
 
@@ -206,6 +259,24 @@
                 confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
                 confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
             }, 250);
+        }
+
+        function showFunnyAlert() {
+            // Sélectionner un message aléatoire
+            const randomMessage = funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
+            
+            // Créer la div de message
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'funny-message';
+            messageDiv.textContent = randomMessage;
+            
+            // Ajouter le message au body
+            document.body.appendChild(messageDiv);
+            
+            // Supprimer la div après l'animation (4 secondes = 0.5s fadeIn + 3s attente + 0.5s fadeOut)
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 4000);
         }
     </script>
 </body>
