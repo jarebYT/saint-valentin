@@ -299,10 +299,11 @@
 
         function showFunnyAlert() {
             // Sélectionner un message aléatoire
+            let randomMessage;
             if (counter >= 15) {
                 randomMessage = funnyMessagesFinal[0];
             } else {
-            const randomMessage = funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
+                randomMessage = funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
             }
             // Créer la div de message
             const messageDiv = document.createElement('div');
@@ -312,7 +313,7 @@
             // Ajouter le message au body
             document.body.appendChild(messageDiv);
             
-            // Supprimer la div après l'animation (4 secondes = 0.5s fadeIn + 3s attente + 0.5s fadeOut)
+            // Supprimer la div après l'animation (2 secondes = 0.5s fadeIn + 3s attente + 0.5s fadeOut)
             setTimeout(() => {
                 messageDiv.remove();
             }, 2000);
