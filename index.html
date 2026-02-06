@@ -188,18 +188,21 @@
 
         // Fonction pour déplacer le bouton "Non"
         function moveButton() {
+            // Padding de sécurité autour des bords
+            const padding = 10;
+            
             // Obtenir les dimensions de la fenêtre
-            const maxWidth = window.innerWidth - noBtn.offsetWidth;
-            const maxHeight = window.innerHeight - noBtn.offsetHeight;
+            const maxWidth = Math.max(padding, window.innerWidth - noBtn.offsetWidth - padding);
+            const maxHeight = Math.max(padding, window.innerHeight - noBtn.offsetHeight - padding);
 
-            // Calculer une position aléatoire
-            const randomX = Math.floor(Math.random() * maxWidth);
-            const randomY = Math.floor(Math.random() * maxHeight);
+            // Calculer une position aléatoire avec les contraintes
+            const randomX = Math.floor(Math.random() * (maxWidth - padding) + padding);
+            const randomY = Math.floor(Math.random() * (maxHeight - padding) + padding);
 
             // Appliquer la nouvelle position
             noBtn.style.position = 'fixed'; // Passe en fixed pour bouger partout
-            noBtn.style.left = randomX + 'px';
-            noBtn.style.top = randomY + 'px';
+            noBtn.style.left = Math.min(randomX, window.innerWidth - noBtn.offsetWidth - padding) + 'px';
+            noBtn.style.top = Math.min(randomY, window.innerHeight - noBtn.offsetHeight - padding) + 'px';
         }
 
         // Messages prédéfinis
