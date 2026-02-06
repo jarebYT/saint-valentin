@@ -17,7 +17,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100%;
+            height: 100vh;
             overflow: hidden; /* Empêche le scroll quand le bouton bouge */
             flex-direction: column;
         }
@@ -30,10 +30,7 @@
             box-shadow: 0 10px 25px rgba(255, 182, 193, 0.4);
             max-width: 90%;
             width: 350px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            position: relative;
             z-index: 10;
         }
 
@@ -97,6 +94,7 @@
             display: none; /* Caché par défaut */
             flex-direction: column;
             align-items: center;
+            animation: fadeIn 0.5s ease-in;
         }
 
         .heart-beat {
@@ -191,18 +189,32 @@
             // Padding de sécurité autour des bords
             const padding = 10;
             
-            // Obtenir les dimensions de la fenêtre
-            const maxWidth = Math.max(padding, window.innerWidth - noBtn.offsetWidth - padding);
-            const maxHeight = Math.max(padding, window.innerHeight - noBtn.offsetHeight - padding);
-
-            // Calculer une position aléatoire avec les contraintes
-            const randomX = Math.floor(Math.random() * (maxWidth - padding) + padding);
-            const randomY = Math.floor(Math.random() * (maxHeight - padding) + padding);
+            // Obtenir les dimensions du bouton
+            const btnWidth = noBtn.offsetWidth;
+            const btnHeight = noBtn.offsetHeight;
+            
+            // Obtenir les dimensions de l'écran
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+            
+            // Calculer les limites avec padding
+            const minX = padding;
+            const maxX = screenWidth - btnWidth - padding;
+            const minY = padding;
+            const maxY = screenHeight - btnHeight - padding;
+            
+            // Assurer que maxX et maxY ne sont pas négatifs
+            const finalMaxX = Math.max(minX, maxX);
+            const finalMaxY = Math.max(minY, maxY);
+            
+            // Calculer une position aléatoire dans les limites
+            const randomX = Math.floor(Math.random() * (finalMaxX - minX + 1)) + minX;
+            const randomY = Math.floor(Math.random() * (finalMaxY - minY + 1)) + minY;
 
             // Appliquer la nouvelle position
-            noBtn.style.position = 'fixed'; // Passe en fixed pour bouger partout
-            noBtn.style.left = Math.min(randomX, window.innerWidth - noBtn.offsetWidth - padding) + 'px';
-            noBtn.style.top = Math.min(randomY, window.innerHeight - noBtn.offsetHeight - padding) + 'px';
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
         }
 
         // Messages prédéfinis
