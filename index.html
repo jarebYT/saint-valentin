@@ -138,7 +138,7 @@
             font-weight: bold;
             z-index: 1000;
             box-shadow: 0 4px 20px rgba(255, 128, 151, 0.5);
-            animation: messageIn 0.5s ease-in, messageOut 0.5s ease-out 3.5s forwards;
+            animation: messageIn 0.5s ease-in, messageOut 0.5s ease-out 2s forwards;
             pointer-events: none;
         }
 
@@ -245,6 +245,7 @@
         ]
 
         let counter = 0;
+        let messageIndex = 0;
 
         // Événements pour le bouton "Non"
         // Desktop : quand la souris passe dessus
@@ -252,6 +253,7 @@
         // Mobile : quand on essaie de toucher
         noBtn.addEventListener('touchstart', (e) => {
             e.preventDefault(); // Empêche le clic
+            counter++;
             showFunnyAlert();
             moveButton();
         });
@@ -298,12 +300,14 @@
         }
 
         function showFunnyAlert() {
-            // Sélectionner un message aléatoire
+            // Sélectionner un message en itérant dans la liste
             let randomMessage;
             if (counter >= 15) {
                 randomMessage = funnyMessagesFinal[0];
             } else {
-                randomMessage = funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
+                // Itération en boucle : 0, 1, 2, ..., puis 0, 1, 2, ...
+                randomMessage = funnyMessages[messageIndex % funnyMessages.length];
+                messageIndex++;
             }
             // Créer la div de message
             const messageDiv = document.createElement('div');
@@ -313,7 +317,6 @@
             // Ajouter le message au body
             document.body.appendChild(messageDiv);
             
-            // Supprimer la div après l'animation (2 secondes = 0.5s fadeIn + 3s attente + 0.5s fadeOut)
             setTimeout(() => {
                 messageDiv.remove();
             }, 2000);
