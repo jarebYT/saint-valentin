@@ -17,7 +17,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: 100%;
             overflow: hidden; /* Empêche le scroll quand le bouton bouge */
             flex-direction: column;
         }
@@ -30,7 +30,10 @@
             box-shadow: 0 10px 25px rgba(255, 182, 193, 0.4);
             max-width: 90%;
             width: 350px;
-            position: relative;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             z-index: 10;
         }
 
@@ -94,7 +97,6 @@
             display: none; /* Caché par défaut */
             flex-direction: column;
             align-items: center;
-            animation: fadeIn 0.5s ease-in;
         }
 
         .heart-beat {
@@ -276,7 +278,7 @@
             // Supprimer la div après l'animation (4 secondes = 0.5s fadeIn + 3s attente + 0.5s fadeOut)
             setTimeout(() => {
                 messageDiv.remove();
-            }, 4000);
+            }, 2000);
         }
     </script>
 </body>
